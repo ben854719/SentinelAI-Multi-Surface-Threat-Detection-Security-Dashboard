@@ -99,8 +99,8 @@ The application is to deploy on Render using a lightweight cloud-native architec
 ## Deploy:
 
 - Render automatically builds and deploys the application on every GitHub push.
-- 
-- A public URL is generated for the SentinelAI dashboard and FastAPI endpoints.
+
+-   A public URL is generated for the SentinelAI dashboard and FastAPI endpoints.
   
 - The platform provides real-time threat monitoring, AI-powered investigations, and interactive cybersecurity visualisations through a unified Security Operations Centre      (SOC) interface.
 
