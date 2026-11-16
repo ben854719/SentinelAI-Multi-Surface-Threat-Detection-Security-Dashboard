@@ -50,4 +50,103 @@ SentinelAI leverages LangChain, LangGraph, and LangSmith to power its agentic AI
 
 - Render
 
+  ## Deployment of Render:
+
+The application is to deploy on Render using a lightweight cloud-native architecture that hosts a browser-based JavaScript and HTML security dashboard alongside and FastAPI. The platform delivers real-time threat monitoring, security analytics, and AI-powered threat investigations through interactive Plotly visualizations and 3D threat mapping. Render provides automated deployment, secure API hosting, scalability, and continuous delivery, enabling users to monitor email security events, financial anomalies, device vulnerabilities, and web security risks through a unified Security Operations Centre dashboard.
+
+## Installation & Deployment Steps (Render):
+
+- Log in to Render
+
+- Click New → Web Service
+
+- Select your project repo
+
+## Configure the Web Service:
+
+- Runtime: Python
+
+## Build Command: 
+
+- `pip install -r requirements.txt`
+
+## Start Command:
+
+- `uvicorn app:app --host 0.0.0.0 --port 10000`
+
+## Environment Variables:
+
+- Gemini API Key
+  
+- LangSmith API Key
+  
+- Model Endpoint URLs
+  
+- Security Configuration Settings
+
+## Add a Background Worker (Agentic AI Workflows):
+
+- Service Type: Background Worker
+
+## Start Command:
+
+- `python agent_loop.py`
+
+## Frontend:
+
+- Browser-based HTML, JavaScript, and Plotly dashboards for security monitoring, KPI visualization, and threat analytics.
+
+## Deploy:
+
+- Render automatically builds and deploys the application on every GitHub push.
+- 
+- A public URL is generated for the SentinelAI dashboard and FastAPI endpoints.
+  
+- The platform provides real-time threat monitoring, AI-powered investigations, and interactive cybersecurity visualisations through a unified Security Operations Centre      (SOC) interface.
+
+## LangChain, LangGraph & LangSmith Integration:
+
+SentinelAI integrates LangChain, LangGraph, and LangSmith to enable intelligent, agentic cybersecurity workflows. LangChain connects the Gemini model with security data sources, analysis tools, and threat intelligence pipelines, while LangGraph orchestrates multi-step workflows for phishing detection, financial anomaly analysis, risk assessment, incident investigation, and threat correlation. LangSmith provides monitoring, debugging, evaluation, and tracing capabilities for AI agents, allowing security workflows to be tested, optimized, and monitored for reliability. Together, these technologies enable SentinelAI to automate threat analysis, generate security insights, and deliver context-aware recommendations through an AI-powered Security Operations Centre (SOC) dashboard
+
+## Each Node:
+
+- Email Threat Analysis Node: Analyses incoming emails for phishing attempts, malicious links, suspicious attachments, and social\-engineering indicators, generating a        threat score and recommended actions.
+
+- Financial Anomaly Detection Node: Monitors financial transaction data to identify unusual spending patterns, high\-risk transactions, and potential fraud activities.
+  
+- Device Security Monitoring Node: Evaluates device health, security configurations, vulnerabilities, and suspicious activity to determine overall device risk.
+  
+- Web Security Scanning Node: Assesses website security posture, detects vulnerabilities, reviews SSL/TLS status, and identifies potential web based threats.
+  
+- Threat Correlation Node: Aggregates findings from email, financial, device, and web security nodes to identify attack patterns and calculate an overall cyber risk score.
+  
+- Risk Assessment Node: Prioritizes incidents based on severity, impact, confidence scores, and business rules to support effective decision making.
+  
+- AI Recommendation Node: Uses Gemini to generate incident summaries, mitigation strategies, and actionable security recommendations.
+  
+- Dashboard Reporting Node: Sends KPIs, alerts, risk scores, and threat intelligence to the Plotly dashboard for real\-time visualisation and monitoring.
+
+## Fallback Logic: 
+
+SentinelAI implements fallback logic to ensure reliable threat analysis and incident processing. If an AI model, data source, or security service is unavailable, the system automatically switches to alternative analysis workflows, cached security data, or rule-based detection methods to maintain continuous monitoring. This resilience ensures that phishing detection, financial anomaly analysis, threat correlation, and security recommendations remain operational even during API failures, service interruptions, or unexpected processing errors.
+
+## LangSmith - Observability, Tracing, and Evaluation:
+
+SentinelAI uses LangSmith to provide comprehensive observability, tracing, and evaluation for its AI-powered security workflows. LangSmith tracks every agent decision, tool invocation, and workflow execution across phishing detection, financial anomaly analysis, threat correlation, and incident investigations, enabling complete visibility into the system's behaviour. Detailed traces help identify performance bottlenecks, debugging issues, and workflow failures, while evaluation metrics measure response quality, threat detection accuracy, and overall agent effectiveness. This observability layer ensures that SentinelAI's AI agents remain reliable, transparent, and continuously optimised for cybersecurity operations.
+
+## Function of the Agent:
+
+- The word is analyze to function the AI agent (Gemini 3.6 flash) for the website.
+
+## How This Fits the Project:
+
+The application uses Gemini 3.6 Flash serves as the core intelligence engine of SentinelAI, integrating with LangChain, LangGraph, and LangSmith to automate cybersecurity analysis and investigation workflows. The agent analyses email threats, financial anomalies, device vulnerabilities, and web security risks, correlates findings across multiple security surfaces, calculates risk scores, and generates actionable recommendations. These insights are then visualized through the Plotly dashboard, enabling users to monitor KPIs, investigate incidents, and gain a unified view of their overall cybersecurity posture from a single Security Operations Centre (SOC) platform.
+  
+
+
+
+
+
+
+
 
