@@ -1,0 +1,251 @@
+!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SentinelAI Security Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🛡️ SentinelAI Security Dashboard</h1>
+
+    <p>
+        AI-Powered Multi-Surface Threat Detection & Security Monitoring
+    </p>
+
+</header>
+
+<div class="container">
+
+    <!-- Platform Overview -->
+
+    <div class="card">
+
+        <h2>Platform Overview</h2>
+
+        <p>
+            SentinelAI monitors phishing emails, financial anomalies,
+            device vulnerabilities, and website security risks while
+            leveraging Gemini-powered AI agents for threat analysis,
+            risk assessment, incident investigation, and security
+            recommendations.
+        </p>
+
+    </div>
+
+    <!-- KPI SECTION -->
+
+    <div class="card">
+
+        <h2>Security KPIs</h2>
+
+        <div class="kpi-grid">
+
+            <div class="kpi-box">
+                <h3>Threat Detection Rate</h3>
+                <p id="detection-rate">98.5%</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>Phishing Blocked</h3>
+                <p id="phishing-blocked">320</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>Security Posture</h3>
+                <p id="security-score">92/100</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>Financial Risk</h3>
+                <p id="financial-risk">87/100</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>Vulnerabilities</h3>
+                <p id="vulnerabilities">45</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>Active Incidents</h3>
+                <p id="active-incidents">12</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>MTTD</h3>
+                <p id="mttd">2.3 Min</p>
+            </div>
+
+            <div class="kpi-box">
+                <h3>MTTR</h3>
+                <p id="mttr">8.7 Min</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ANALYSIS PANELS -->
+
+    <div class="section-grid">
+
+        <div class="card">
+
+            <h2>Email Security Analysis</h2>
+
+            <p><strong>Emails Analysed:</strong> 12,500+</p>
+            <p><strong>Phishing Accuracy:</strong> 95%</p>
+            <p><strong>Status:</strong> Protected</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Financial Risk Monitoring</h2>
+
+            <p><strong>Transactions Analysed:</strong> 5,450</p>
+            <p><strong>Anomalies Detected:</strong> 14</p>
+            <p><strong>Status:</strong> Monitoring</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Device Security Monitoring</h2>
+
+            <p><strong>Security Score:</strong> 92/100</p>
+            <p><strong>Missing Patches:</strong> 3</p>
+            <p><strong>Status:</strong> Healthy</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Web Security Assessment</h2>
+
+            <p><strong>Website Risk Score:</strong> 90/100</p>
+            <p><strong>Critical Issues:</strong> 1</p>
+            <p><strong>SSL Status:</strong> Active</p>
+
+        </div>
+
+    </div>
+
+    <!-- THREAT CORRELATION -->
+
+    <div class="card">
+
+        <h2>Threat Correlation Engine</h2>
+
+        <p>
+            SentinelAI correlates phishing attempts, suspicious
+            financial transactions, device vulnerabilities, and web
+            security findings to identify attack chains and prioritise
+            threats across multiple digital surfaces.
+        </p>
+
+    </div>
+
+    <!-- LANGGRAPH STATUS -->
+
+    <div class="card">
+
+        <h2>LangGraph Workflow Status</h2>
+
+        <ul>
+            <li>Email Threat Workflow: Active</li>
+            <li>Financial Analysis Workflow: Active</li>
+            <li>Device Monitoring Workflow: Active</li>
+            <li>Web Security Workflow: Active</li>
+            <li>Threat Correlation Workflow: Active</li>
+        </ul>
+
+    </div>
+
+    <!-- LANGSMITH -->
+
+    <div class="card">
+
+        <h2>LangSmith Observability</h2>
+
+        <ul>
+            <li>Agent Runs Tracked</li>
+            <li>Workflow Traces Captured</li>
+            <li>Model Evaluations Logged</li>
+            <li>Performance Metrics Monitored</li>
+        </ul>
+
+    </div>
+
+    <!-- GEMINI AGENT -->
+
+    <div class="card">
+
+        <h2>Gemini AI Agent Insights</h2>
+
+        <ul>
+
+            <li>Analyse phishing attacks</li>
+            <li>Detect financial anomalies</li>
+            <li>Correlate multi-surface threats</li>
+            <li>Calculate cyber risk scores</li>
+            <li>Generate remediation guidance</li>
+            <li>Prioritise incidents automatically</li>
+
+        </ul>
+
+    </div>
+
+    <!-- THREE.JS AREA -->
+
+    <div class="card">
+
+        <h2>3D Threat Correlation Centre</h2>
+
+        <div id="security-scene"></div>
+
+    </div>
+
+    <!-- INCIDENT FEED -->
+
+    <div class="card">
+
+        <h2>Recent Incident Feed</h2>
+
+        <ul class="incident-list">
+
+            <li>High-risk phishing email detected.</li>
+            <li>Suspicious login activity identified.</li>
+            <li>Financial anomaly flagged.</li>
+            <li>Device vulnerability discovered.</li>
+            <li>Website assessment completed.</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<footer>
+
+    <p>
+        SentinelAI © 2026 |
+        Personal Security Operations Centre (SOC)
+    </p>
+
+</footer>
+
+<script src="/static/dashboard.js"></script>
+
+</body>
+
+</html>
