@@ -48,7 +48,7 @@ SentinelAI leverages LangChain, LangGraph, and LangSmith to power its agentic AI
 
 - Render
 
-  ## Deployment of Render:
+## Deployment of Render:
 
 The application is to deploy on Render using a lightweight cloud-native architecture that hosts a browser-based JavaScript and HTML security dashboard alongside and FastAPI. The platform delivers real-time threat monitoring, security analytics, and AI-powered threat investigations through interactive Plotly visualizations and 3D threat mapping. Render provides automated deployment, secure API hosting, scalability, and continuous delivery, enabling users to monitor email security events, financial anomalies, device vulnerabilities, and web security risks through a unified Security Operations Centre dashboard.
 
