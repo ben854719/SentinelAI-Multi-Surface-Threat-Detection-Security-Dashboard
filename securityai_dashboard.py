@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-"""SecurityAI Dashboard.ipynb
-
-# Commented out IPython magic to ensure Python compatibility.
 # %%html
 # <!-- Container of the Dashboard -->
 # <div id="dashboard-container">
