@@ -14,7 +14,7 @@ The SentinelAI dashboard provides a unified, real-time view of cybersecurity and
 
 ## JavaScript/HTML User Interface:
 
-SentinelAI features a responsive browser-based interface built with JavaScript, HTML, and modern web technologies to deliver real-time security monitoring and threat visualisation. The platform includes interactive Plotly dashboards, dynamic security analytics, and a 3D threat visualisation engine that enables users to explore relationships between emails, financial accounts, devices, websites, and detected threats. Through an intuitive user experience, users can monitor KPIs, investigate security incidents, analyse attack trends, and receive AI-generated recommendations from a single web-based security operations dashboard.
+SentinelAI features a responsive browser-based interface built with JavaScript, HTML, and modern web technologies to deliver real-time security monitoring and threat visualisation. The platform includes interactive dashboards, dynamic security analytics, and a 3D threat visualisation engine that enables users to explore relationships between emails, financial accounts, devices, websites, and detected threats. Through an intuitive user experience, users can monitor KPIs, investigate security incidents, analyse attack trends, and receive AI-generated recommendations from a single web-based security operations dashboard.
 
 ## Plotly Dashboard:
 
