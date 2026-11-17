@@ -2,7 +2,7 @@
 
 ## Objective:
 
-SentinelAI is an AI-powered multi-surface threat detection and security dashboard that monitors personal emails for phishing attacks, analyses banking activity for fraud and anomalies, scans devices and websites for security risks, and correlates threats across all digital surfaces. Through a Plotly-powered unified dashboard, users can track key cybersecurity KPIs and metrics including a 98.5% Threat Detection Rate, 95% Phishing Detection Accuracy, 12,500+ Emails Analysed, 320 Phishing Attempts Blocked, 92/100 Security Posture Score, 87/100 Financial Risk Score, 45 Vulnerabilities Identified, 99.2% Asset Monitoring Coverage, 2.3-minute Mean Time to Detect (MTTD), 8.7-minute Mean Time to Respond (MTTR), and an overall 18/100 Cyber Risk Rating. Agentic AI workflows automatically investigate alerts, prioritise incidents, and generate remediation recommendations, while a browser-based JavaScript and HTML 3D visualisation engine provides an interactive view of relationships between emails, financial accounts, devices, websites, and cyber threats. SentinelAI functions as a personal Security Operations Centre (SOC), delivering real-time visibility, automated threat analysis, and proactive cyber defence from a single intelligent dashboard.
+SentinelAI is an AI-powered multi-surface threat detection and security dashboard that monitors my personal emails (nguyenben85@gmail.com) for phishing attacks, analyses banking activity for fraud and anomalies, scans devices and websites for security risks, and correlates threats across all digital surfaces. Through a Plotly-powered unified dashboard, users can track key cybersecurity KPIs and metrics including a 98.5% Threat Detection Rate, 95% Phishing Detection Accuracy, 12,500+ Emails Analysed, 320 Phishing Attempts Blocked, 92/100 Security Posture Score, 87/100 Financial Risk Score, 45 Vulnerabilities Identified, 99.2% Asset Monitoring Coverage, 2.3-minute Mean Time to Detect (MTTD), 8.7-minute Mean Time to Respond (MTTR), and an overall 18/100 Cyber Risk Rating. Agentic AI workflows automatically investigate alerts, prioritise incidents, and generate remediation recommendations, while a browser-based JavaScript and HTML 3D visualisation engine provides an interactive view of relationships between emails, financial accounts, devices, websites, and cyber threats. SentinelAI functions as a personal Security Operations Centre (SOC), delivering real-time visibility, automated threat analysis, and proactive cyber defence from a single intelligent dashboard.
 
 ## Key Features:
 
@@ -110,7 +110,7 @@ SentinelAI integrates LangChain, LangGraph, and LangSmith to enable intelligent,
 
 ## Each Node:
 
-- Email Threat Analysis Node: Analyses incoming emails for phishing attempts, malicious links, suspicious attachments, and social\-engineering indicators, generating a        threat score and recommended actions.
+- Email Threat Analysis Node: Analyses incoming emails from my gmail for phishing attempts, malicious links, suspicious attachments, and social engineering indicators,        generating a threat score and recommended actions.
 
 - Financial Anomaly Detection Node: Monitors financial transaction data to identify unusual spending patterns, high\-risk transactions, and potential fraud activities.
   
