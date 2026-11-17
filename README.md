@@ -46,8 +46,6 @@ SentinelAI leverages LangChain, LangGraph, and LangSmith to power its agentic AI
 
 - MCP Server
 
-- Fastmcp
-
 - Render
 
   ## Deployment of Render:
