@@ -42,6 +42,8 @@ SentinelAI leverages LangChain, LangGraph, and LangSmith to power its agentic AI
 
 - LangSmith
 
+- base64
+
 - Gemini 3.6 flash
 
 - MCP Server
