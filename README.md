@@ -70,9 +70,9 @@ The application is to deploy on Render using a lightweight cloud-native architec
 
 ## Environment Variables:
 
-- Gemini API Key
+- GOOGLE_API_KEY
   
-- LangSmith API Key
+- LangSmith_API_Key
   
 ## Add a Background Worker (Agentic AI Workflows):
 
