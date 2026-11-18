@@ -72,7 +72,7 @@ The application is to deploy on Render using a lightweight cloud-native architec
 
 ## Start Command:
 
-- `uvicorn app:app --host 0.0.0.0 --port 10000`
+- uvicorn app:app --host 0.0.0.0 --port $PORT
 
 ## Environment Variables:
 
