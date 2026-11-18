@@ -30,6 +30,8 @@ SentinelAI leverages LangChain, LangGraph, and LangSmith to power its agentic AI
 
 - JSON
 
+- JavaScript
+
 - LangChain
 
 - LangGraph
