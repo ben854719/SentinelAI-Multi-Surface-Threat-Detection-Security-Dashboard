@@ -1,4 +1,3 @@
-# %%html
 # <!-- Container of the Dashboard -->
 # <div id="dashboard-container">
 #     <style>
