@@ -10,11 +10,7 @@ SentinelAI combines AI-powered phishing detection, financial anomaly monitoring,
 
 ## Dashboard:
 
-The SentinelAI dashboard provides a unified, real-time view of cybersecurity and financial risk across emails, devices, websites, and financial accounts. Built with Plotly and JavaScript, the dashboard displays interactive KPIs and analytics including Threat Detection Rate, Phishing Attempts Blocked, Financial Risk Score, Security Posture Score, Vulnerabilities Detected, Active Incidents, MTTD, and MTTR. Users can explore threat trends, monitor system health, visualise attack correlations, and investigate security events through dynamic charts, risk heatmaps, and an interactive 3D threat map, enabling faster and more informed security decisions.
-
-## JavaScript/HTML User Interface:
-
-The application features a responsive browser-based interface built with JavaScript, HTML, and modern web technologies to deliver real-time security monitoring and threat visualization. The platform includes interactive dashboards, dynamic security analytics, and a 3D threat visualisation engine that enables users to explore relationships between emails, financial accounts, devices, websites, and detected threats. Through an intuitive user experience, users can monitor KPIs, investigate security incidents, analyse attack trends, and receive AI-generated recommendations from a single web-based security operations dashboard.
+The SentinelAI dashboard provides a unified, real-time view of cybersecurity and financial risk across emails, devices, websites, and financial accounts. Built with Plotly, the dashboard displays interactive KPIs and analytics including Threat Detection Rate, Phishing Attempts Blocked, Financial Risk Score, Security Posture Score, Vulnerabilities Detected, Active Incidents, MTTD, and MTTR. Users can explore threat trends, monitor system health, visualise attack correlations, and investigate security events through dynamic charts, risk heatmaps, and an interactive 3D threat map, enabling faster and more informed security decisions.
 
 ## Plotly Dashboard:
 
