@@ -5,7 +5,7 @@ pandas
 numpy
 plotly
 
-langchai
+langchain
 langchain-google-genai
 
 langgraph
