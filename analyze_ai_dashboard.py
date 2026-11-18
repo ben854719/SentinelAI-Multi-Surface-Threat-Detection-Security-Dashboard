@@ -1,10 +1,55 @@
+# ============================================================
+# SENTINEL AI: Autonomous Cybersecurity Intelligence Platform
+# ============================================================
+
+import os
+import io
+import json
+import base64
+import random
 import numpy as np
 import pandas as pd
-import plotly.express as px
+from fastapi import FastAPI, Request, Body
+from fastapi.responses import HTMLResponse, JSONResponse
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langgraph.graph import StateGraph, END
+from langsmith import Client
+from mcp.server import MCPServer
+from typing import TypedDict
 
-# SYNTHETIC CYBERSECURITY & FINANCIAL RISK DATA
+# ============================================================
+# GEMINI
+# ============================================================
+
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.6-flash",
+    api_key=os.environ["GOOGLE_API_KEY"]
+)
+
+# ============================================================
+# LANGSMITH
+# ============================================================
+
+ls_client = Client()
+
+def trace_run(user_input, output):
+
+    try:
+
+        ls_client.create_run(
+            name="sentinel-ai-run",
+            inputs={"input": user_input},
+            outputs=output
+        )
+
+    except:
+        pass
+
+# ============================================================
+# CYBER DATASET
+# ============================================================
 
 np.random.seed(42)
 
@@ -15,422 +60,626 @@ dates = pd.date_range(
 )
 
 df = pd.DataFrame({
+
     "Date": dates,
 
-    # Email Security
-    "Phishing_Attempts": np.random.randint(50, 300, 90),
-    "Blocked_Phishing": np.random.randint(40, 280, 90),
+    "Phishing_Attempts":
+        np.random.randint(50,300,90),
 
-    # Financial Monitoring
-    "Suspicious_Transactions": np.random.randint(5, 50, 90),
-    "Financial_Risk_Score": np.random.randint(30, 100, 90),
+    "Blocked_Phishing":
+        np.random.randint(40,280,90),
 
-    # Endpoint Security
-    "Critical_Vulnerabilities": np.random.randint(0, 15, 90),
-    "High_Vulnerabilities": np.random.randint(5, 25, 90),
+    "Suspicious_Transactions":
+        np.random.randint(5,50,90),
 
-    # Security Operations
-    "Active_Incidents": np.random.randint(1, 20, 90),
-    "MTTD": np.random.randint(5, 25, 90),
-    "MTTR": np.random.randint(15, 120, 90),
+    "Financial_Risk_Score":
+        np.random.randint(30,100,90),
 
-    # Website Security
-    "SSL_Issues": np.random.randint(0, 10, 90),
-    "API_Exposures": np.random.randint(0, 8, 90),
-    "Open_Ports": np.random.randint(5, 30, 90),
+    "Critical_Vulnerabilities":
+        np.random.randint(0,15,90),
 
-    # Device Security
-    "Device_Risk_Score": np.random.randint(40, 100, 90),
-    "Security_Posture_Score": np.random.randint(60, 100, 90)
+    "High_Vulnerabilities":
+        np.random.randint(5,25,90),
+
+    "Active_Incidents":
+        np.random.randint(1,20,90),
+
+    "MTTD":
+        np.random.randint(5,25,90),
+
+    "MTTR":
+        np.random.randint(15,120,90),
+
+    "SSL_Issues":
+        np.random.randint(0,10,90),
+
+    "API_Exposures":
+        np.random.randint(0,8,90),
+
+    "Open_Ports":
+        np.random.randint(5,30,90),
+
+    "Device_Risk_Score":
+        np.random.randint(40,100,90),
+
+    "Security_Posture_Score":
+        np.random.randint(60,100,90)
 })
 
-# ======================================================
+# ============================================================
 # DERIVED METRICS
-# ======================================================
+# ============================================================
 
 df["Threat_Detection_Rate"] = (
-    df["Blocked_Phishing"] /
-    df["Phishing_Attempts"] * 100
-).clip(0, 100)
+
+    df["Blocked_Phishing"]
+    /
+    df["Phishing_Attempts"]
+
+) * 100
+
 
 df["Overall_Cyber_Risk"] = (
-    (100 - df["Security_Posture_Score"]) * 0.25 +
-    df["Financial_Risk_Score"] * 0.30 +
-    df["Active_Incidents"] * 1.5 +
-    df["Critical_Vulnerabilities"] * 2 +
+
+    (100 - df["Security_Posture_Score"]) * 0.25
+    +
+    df["Financial_Risk_Score"] * 0.30
+    +
+    df["Active_Incidents"] * 1.5
+    +
+    df["Critical_Vulnerabilities"] * 2
+    +
     df["API_Exposures"] * 1.2
-).round(2)
 
-# ================================================
-
-# Optimized Dashboard layout using Plotly Subplots, Pandas, and NumPy data structures
-fig = make_subplots(
-    rows=3, cols=2,
-    subplot_titles=(
-        "<b>Overall Cyber Risk Trend</b>",
-        "<b>Phishing Efficacy (Attempts vs. Blocked)</b>",
-        "<b>Vulnerability Distribution (Critical & High)</b>",
-        "<b>Financial Risk vs. Suspicious Incidents</b>",
-        "<b>Ops Load & Efficiency (Incidents & MTTR)</b>",
-        "<b>Posture and Device Integrity Scores</b>"
-    ),
-    vertical_spacing=0.12,
-    horizontal_spacing=0.10
 )
 
-# 1. Overall Cyber Risk Trend
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Overall_Cyber_Risk'],
-        name='Overall Cyber Risk',
-        line=dict(color='firebrick', width=2.5),
-        hovertemplate='Date: %{x}<br>Risk: %{y}'
-    ),
-    row=1, col=1
-)
+# ============================================================
+# DASHBOARD CREATION
+# ============================================================
 
-# 2. Phishing Attempts vs Blocked (Using barmode grouped look via overlapping offset)
-fig.add_trace(
-    go.Bar(
-        x=df['Date'],
-        y=df['Phishing_Attempts'],
-        name='Phishing Attempts',
-        marker_color='#1f77b4',
-        hovertemplate='Date: %{x}<br>Attempts: %{y}'
-    ),
-    row=1, col=2
-)
-fig.add_trace(
-    go.Bar(
-        x=df['Date'],
-        y=df['Blocked_Phishing'],
-        name='Blocked Phishing',
-        marker_color='#2ca02c',
-        hovertemplate='Date: %{x}<br>Blocked: %{y}'
-    ),
-    row=1, col=2
-)
+def create_dashboard():
 
-# 3. Endpoint Vulnerabilities
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Critical_Vulnerabilities'],
-        name='Critical Vulns',
-        stackgroup='one',
-        fillcolor='rgba(214, 39, 40, 0.65)',
-        line=dict(width=0.5, color='red'),
-        hovertemplate='Date: %{x}<br>Critical: %{y}'
-    ),
-    row=2, col=1
-)
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['High_Vulnerabilities'],
-        name='High Vulns',
-        stackgroup='one',
-        fillcolor='rgba(255, 127, 14, 0.55)',
-        line=dict(width=0.5, color='orange'),
-        hovertemplate='Date: %{x}<br>High: %{y}'
-    ),
-    row=2, col=1
-)
-
-# 4. Financial Risk vs Suspicious Transactions
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Financial_Risk_Score'],
-        name='Financial Risk Score',
-        line=dict(color='purple', width=2, dash='dash'),
-        hovertemplate='Date: %{x}<br>Risk Score: %{y}'
-    ),
-    row=2, col=2
-)
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Suspicious_Transactions'],
-        name='Suspicious Transactions',
-        line=dict(color='indigo', width=2),
-        hovertemplate='Date: %{x}<br>Transactions: %{y}'
-    ),
-    row=2, col=2
-)
-
-# 5. Security Operations
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Active_Incidents'],
-        name='Active Incidents',
-        mode='lines+markers',
-        marker=dict(size=4),
-        line=dict(color='teal', width=1.5),
-        hovertemplate='Date: %{x}<br>Active Incidents: %{y}'
-    ),
-    row=3, col=1
-)
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['MTTR'],
-        name='MTTR (min)',
-        line=dict(color='grey', width=1.5, dash='dot'),
-        hovertemplate='Date: %{x}<br>MTTR: %{y} min'
-    ),
-    row=3, col=1
-)
-
-# 6. Posture and Device Risk
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Security_Posture_Score'],
-        name='Security Posture',
-        line=dict(color='forestgreen', width=2),
-        hovertemplate='Date: %{x}<br>Posture: %{y}'
-    ),
-    row=3, col=2
-)
-fig.add_trace(
-    go.Scatter(
-        x=df['Date'],
-        y=df['Device_Risk_Score'],
-        name='Device Risk',
-        line=dict(color='goldenrod', width=1.5),
-        hovertemplate='Date: %{x}<br>Device Risk: %{y}'
-    ),
-    row=3, col=2
-)
-
-# Layout Configurations
-fig.update_layout(
-    title_text="<b>Enterprise Cybersecurity & Financial Risk Dashboard</b>",
-    title_font_size=22,
-    height=950,
-    width=1150,
-    barmode='group',
-    showlegend=True,
-    template="plotly_white",
-    legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.02,
-        xanchor="right",
-        x=1
+    fig = make_subplots(
+        rows=3,
+        cols=2
     )
+
+    fig.add_trace(
+
+        go.Scatter(
+            x=df["Date"],
+            y=df["Overall_Cyber_Risk"],
+            name="Cyber Risk"
+        ),
+
+        row=1,
+        col=1
+    )
+
+    fig.add_trace(
+
+        go.Bar(
+            x=df["Date"],
+            y=df["Phishing_Attempts"],
+            name="Phishing"
+        ),
+
+        row=1,
+        col=2
+    )
+
+    fig.add_trace(
+
+        go.Bar(
+            x=df["Date"],
+            y=df["Blocked_Phishing"],
+            name="Blocked"
+        ),
+
+        row=1,
+        col=2
+    )
+
+    fig.add_trace(
+
+        go.Scatter(
+            x=df["Date"],
+            y=df["Critical_Vulnerabilities"],
+            name="Critical"
+        ),
+
+        row=2,
+        col=1
+    )
+
+    fig.add_trace(
+
+        go.Scatter(
+            x=df["Date"],
+            y=df["Financial_Risk_Score"],
+            name="Financial"
+        ),
+
+        row=2,
+        col=2
+    )
+
+    fig.add_trace(
+
+        go.Scatter(
+            x=df["Date"],
+            y=df["Active_Incidents"],
+            name="Incidents"
+        ),
+
+        row=3,
+        col=1
+    )
+
+    fig.add_trace(
+
+        go.Scatter(
+            x=df["Date"],
+            y=df["Security_Posture_Score"],
+            name="Posture"
+        ),
+
+        row=3,
+        col=2
+    )
+
+    fig.update_layout(
+
+        height=950,
+        width=1150,
+
+        title=
+        "SentinelAI Cybersecurity Intelligence Dashboard",
+
+        template="plotly_white"
+
+    )
+
+    return fig
+
+# ============================================================
+# AGENT STATE
+# ============================================================
+
+class SentinelState(TypedDict):
+
+    input: str
+
+    metrics: dict
+
+    anomalies: dict
+
+    risk: dict
+
+    dashboard_html: str
+
+    analysis: str
+
+    decision: str
+
+    action_report: str
+
+# ============================================================
+# AGENT 1
+# KPI AGENT
+# ============================================================
+
+def metrics_step(state):
+
+    metrics = {
+
+        "Average Risk":
+            round(df["Overall_Cyber_Risk"].mean(),2),
+
+        "Average Posture":
+            round(df["Security_Posture_Score"].mean(),2),
+
+        "Average Phishing":
+            round(df["Phishing_Attempts"].mean(),2),
+
+        "Average MTTR":
+            round(df["MTTR"].mean(),2)
+    }
+
+    return {
+        "metrics": metrics
+    }
+
+# ============================================================
+# AGENT 2
+# ANOMALY
+# ============================================================
+
+def anomaly_step(state):
+
+    anomalies = df[
+        df["Overall_Cyber_Risk"]
+        >
+        df["Overall_Cyber_Risk"].mean() * 1.5
+    ]
+
+    return {
+
+        "anomalies": {
+
+            "count": len(anomalies),
+
+            "records":
+                anomalies.head(10).to_dict()
+        }
+    }
+
+# ============================================================
+# AGENT 3
+# RISK
+# ============================================================
+
+def risk_step(state):
+
+    top_risk = (
+
+        df.sort_values(
+            "Overall_Cyber_Risk",
+            ascending=False
+        )
+
+        .head(10)
+    )
+
+    return {
+
+        "risk": {
+
+            "top_risk":
+                top_risk.to_dict()
+        }
+    }
+
+# ============================================================
+# AGENT 4
+# DASHBOARD
+# ============================================================
+
+def dashboard_step(state):
+
+    dashboard_html = (
+
+        create_dashboard()
+
+        .to_html(
+
+            full_html=False,
+
+            include_plotlyjs="cdn"
+        )
+
+    )
+
+    return {
+
+        "dashboard_html":
+            dashboard_html
+    }
+
+# ============================================================
+# AGENT 5
+# GEMINI ANALYSIS
+# ============================================================
+
+def analysis_step(state):
+
+    prompt = f"""
+
+You are SentinelAI.
+
+Metrics:
+{json.dumps(state['metrics'],indent=2)}
+
+Risk:
+{json.dumps(state['risk'],indent=2)}
+
+Anomalies:
+{json.dumps(state['anomalies'],indent=2)}
+
+Provide:
+
+1 Threat Assessment
+
+2 Root Cause
+
+3 Risk Severity
+
+4 Recommended Actions
+
+5 Executive Summary
+
+"""
+
+    result = llm.invoke(prompt)
+
+    return {
+
+        "analysis":
+            result.content
+    }
+
+# ============================================================
+# AGENT 6
+# DECISION
+# ============================================================
+
+def decision_step(state):
+
+    text = (
+        state["analysis"]
+        .lower()
+    )
+
+    if (
+
+        "critical" in text
+        or
+        "breach" in text
+        or
+        "high" in text
+
+    ):
+
+        decision = (
+            "Escalate to SOC Team"
+        )
+
+    else:
+
+        decision = (
+            "Continue Monitoring"
+        )
+
+    return {
+
+        "decision": decision
+    }
+
+# ============================================================
+# AGENT 7
+# RESPONSE
+# ============================================================
+
+def action_step(state):
+
+    report = f"""
+
+Decision:
+{state['decision']}
+
+Recommended Actions
+
+• Investigate phishing surges
+
+• Review API exposures
+
+• Patch critical vulnerabilities
+
+• Reduce MTTR
+
+• Improve posture score
+
+• Validate suspicious transactions
+
+"""
+
+    return {
+
+        "action_report":
+            report
+    }
+
+# ============================================================
+# LANGGRAPH
+# ============================================================
+
+builder = StateGraph(SentinelState)
+
+builder.add_node(
+    "metrics",
+    metrics_step
 )
 
-# Update axis properties for clean design
-fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey')
-fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey')
+builder.add_node(
+    "anomaly",
+    anomaly_step
+)
 
-fig.show()
+builder.add_node(
+    "risk",
+    risk_step
+)
 
-!pip install --upgrade langchain-google-genai google-generativeai langgraph==1.1.1 langsmith
+builder.add_node(
+    "dashboard",
+    dashboard_step
+)
 
-import os
-os.environ["LANGSMITH_API_KEY"] = "LangSmith"
+builder.add_node(
+    "analysis",
+    analysis_step
+)
 
-!pip install --upgrade "mcp[cli]"
-from mcp.server.mcpserver import MCPServer
+builder.add_node(
+    "decision",
+    decision_step
+)
 
-mcp = MCPServer("GeminiTools")
+builder.add_node(
+    "action",
+    action_step
+)
 
-@mcp.tool()
-def search(query: str) -> list:
-    # Your search logic here
-    return ["Result 1", "Result 2"]
+builder.set_entry_point("metrics")
 
-!cd mcp-server-demo
+builder.add_edge(
+    "metrics",
+    "anomaly"
+)
 
-!cd mcp-server-demo && uv add langchain-google-genai langgraph langsmith
+builder.add_edge(
+    "anomaly",
+    "risk"
+)
 
-import os
-import json
-import random
-import pandas as pd
-from google.colab import userdata
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
-from langgraph.graph import StateGraph, END
-from typing import TypedDict
-from mcp.server.mcpserver import MCPServer
-from langsmith.run_helpers import traceable
+builder.add_edge(
+    "risk",
+    "dashboard"
+)
 
-# SentinelAI Agent State Definition
-class SentinelAIState(TypedDict):
-    input: str
-    logs: str
-    symptom: str
-    diagnostic_report: str
-    context: dict
-    kpi_metrics: dict
-    trace_id: str
-    threat_model: dict
-    resilience_model: dict
-    immune_response: dict
+builder.add_edge(
+    "dashboard",
+    "analysis"
+)
 
-# SentinelAI Prompt Template (Incorporating Plotly Dashboard Data Analysis)
-prompt = ChatPromptTemplate.from_template("""
-You are the Agentic Reasoning Layer of SentinelAI, an Autonomous Threat Investigation System.
+builder.add_edge(
+    "analysis",
+    "decision"
+)
 
-Core Principles:
-- Multi-Step Threat Investigation & Correlation: Evaluate indicators across phishing, endpoint, financial, and device integrity.
-- Data-Driven Posture Analytics: Provide continuous assessment using live telemetry metrics.
-- Transparent Diagnostic Reasoning: Deliver precise root-cause analysis and mitigation strategies.
+builder.add_edge(
+    "decision",
+    "action"
+)
 
-Signal/Symptom: {symptom}
-Incident Logs: {logs}
+builder.add_edge(
+    "action",
+    END
+)
 
-[DASHBOARD METRICS & TRENDS FOR ANALYSIS]
-{graph_metrics_summary}
+agent_app = builder.compile()
 
-[OPERATIONAL TELEMETRY]
-{kpi_data}
+# ============================================================
+# FASTAPI
+# ============================================================
 
-Your tasks:
-1. Correlate the dashboard trend statistics with the active incident symptoms.
-2. Diagnose anomalies, security posture drift, and systemic vulnerabilities.
-3. Propose defensive actions and digital antibodies to mitigate the discovered risks.
+app = FastAPI()
+
+@app.get("/")
+def home():
+
+    return HTMLResponse("""
+
+<h1>
+SentinelAI Platform
+</h1>
+
+<a href='/dashboard'>
+Dashboard
+</a>
+
+<br><br>
+
+<a href='/agent-ui'>
+Agent Console
+</a>
+
 """)
 
-# Gemini Model Binding
-api_key = userdata.get("Ben856")
-os.environ["GOOGLE_API_KEY"] = api_key
+# ============================================================
+# DASHBOARD
+# ============================================================
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    api_key=api_key
-)
+@app.get("/dashboard")
 
-try:
-    tools = [search]
-    llm_with_tools = llm.bind_tools(tools)
-except NameError:
-    llm_with_tools = llm
+def dashboard():
 
-# Entry Node — SentinelAI Data Synthesis
-@traceable(name="sentinel_entry_node")
-def entry_node(state: SentinelAIState) -> SentinelAIState:
-    # Synthesizing and summarizing the Plotly dataset 'df'
-    graph_summary = {}
-    try:
-        global df
-        if 'df' in globals() and not df.empty:
-            graph_summary = {
-                "Days Covered": len(df),
-                "Mean Cyber Risk Index": round(df["Overall_Cyber_Risk"].mean(), 2),
-                "Peak Cyber Risk": round(df["Overall_Cyber_Risk"].max(), 2),
-                "Mean Phishing Attempts/Day": round(df["Phishing_Attempts"].mean(), 2),
-                "Mean Blocked Phishing": round(df["Blocked_Phishing"].mean(), 2),
-                "Phishing Block Efficacy (%)": round((df["Blocked_Phishing"].sum() / df["Phishing_Attempts"].sum()) * 100, 2),
-                "Average Active Incidents": round(df["Active_Incidents"].mean(), 2),
-                "Mean Mean-Time-To-Resolve (MTTR - mins)": round(df["MTTR"].mean(), 2),
-                "Mean Security Posture Score": round(df["Security_Posture_Score"].mean(), 2)
-            }
-    except Exception as e:
-        graph_summary = {"error": f"DataFrame metrics unavailable: {str(e)}"}
+    html = (
 
-    kpi_summary = {
-        "Threat Velocity": {"current": 0.42, "baseline": 0.30},
-        "Anomaly Density": {"current": 0.18, "baseline": 0.25},
-        "Incident Response Time (sec)": {"current": 1.4, "baseline": 2.1},
-        "System Stability": {"current": 0.92, "baseline": 0.80}
-    }
+        create_dashboard()
 
-    threat_model = {
-        "detected": True,
-        "type": "Behavioral Drift",
-        "confidence": 0.87,
-        "antibody_synthesized": True,
-        "deployment_time_ms": 420
-    }
-
-    resilience_model = {
-        "resilience_score": 0.91,
-        "bottlenecks": ["Network Latency", "Resource Allocation"],
-        "risk_projection": "Low",
-        "timeline_projection_min": 12
-    }
-
-    immune_response = {
-        "digital_antibody": "ACIS-ABX-2026",
-        "response_vector": "behavioral-correction",
-        "effectiveness": 0.93
-    }
-
-    return {
-        **state,
-        "symptom": state["input"],
-        "kpi_metrics": kpi_summary,
-        "threat_model": threat_model,
-        "resilience_model": resilience_model,
-        "immune_response": immune_response,
-        "context": {**state.get("context", {}), "graph_summary": graph_summary},
-        "trace_id": f"sentinel-trace-{random.randint(1000, 9999)}"
-    }
-
-# LLM Node — SentinelAI Reasoning Layer
-@traceable(name="sentinel_llm_node")
-def llm_node(state: SentinelAIState) -> SentinelAIState:
-    kpi_str = json.dumps(state["kpi_metrics"], indent=2)
-    graph_metrics_str = json.dumps(state["context"].get("graph_summary", {}), indent=2)
-
-    messages = prompt.format_messages(
-        symptom=state["symptom"],
-        logs=state.get("logs", "Normal operational telemetry"),
-        kpi_data=kpi_str,
-        graph_metrics_summary=graph_metrics_str
+        .to_html(
+            full_html=True,
+            include_plotlyjs="cdn"
+        )
     )
 
-    response = llm_with_tools.invoke(messages)
+    return HTMLResponse(html)
 
-    return {
-        **state,
-        "diagnostic_report": response.content
-    }
+# ============================================================
+# AGENT API
+# ============================================================
 
-# Display Node — SentinelAI Analysis Output
-@traceable(name="sentinel_display_node")
-def display_node(state: SentinelAIState) -> SentinelAIState:
-    print("\n=== SentinelAI Autonomous Threat Investigation Report ===")
-    print(f"Trace ID: {state['trace_id']}")
-    print(f"Context Source: {state['context'].get('source', 'SentinelAI Hub')}")
+@app.post("/agent")
 
-    print("\n--- Threat Model ---")
-    print(json.dumps(state["threat_model"], indent=2))
+def run_agent(
+    prompt: str = Body(...)
+):
 
-    print("\n--- Resilience Simulation ---")
-    print(json.dumps(state["resilience_model"], indent=2))
+    result = agent_app.invoke({
 
-    print("\n--- Cyber Response & Immunization ---")
-    print(json.dumps(state["immune_response"], indent=2))
+        "input": prompt,
 
-    print("\n--- SentinelAI Threat Trend Analysis (Gemini Evaluated) ---")
-    print(state["diagnostic_report"])
+        "metrics": {},
 
-    return state
+        "anomalies": {},
 
-# SentinelAI Workflow Graph
-workflow = StateGraph(SentinelAIState)
-workflow.add_node("entry", entry_node)
-workflow.add_node("llm", llm_node)
-workflow.add_node("display", display_node)
+        "risk": {},
 
-workflow.set_entry_point("entry")
-workflow.add_edge("entry", "llm")
-workflow.add_edge("llm", "display")
-workflow.add_edge("display", END)
+        "dashboard_html": "",
 
-agent_executor = workflow.compile()
+        "analysis": "",
 
-# Execute SentinelAI
-agent_executor.invoke({
-    "input": "Analyze the overall cyber risk trends and security metrics from our dashboard.",
-    "logs": "Telemetry logs indicate anomalous phishing surges and unstable MTTR spikes.",
-    "context": {"source": "Enterprise Security Dashboard"}
-})
+        "decision": "",
+
+        "action_report": ""
+
+    })
+
+    trace_run(
+        prompt,
+        result
+    )
+
+    return result
+
+# ============================================================
+# AGENT UI
+# ============================================================
+
+@app.get("/agent-ui")
+
+def agent_ui():
+
+    return HTMLResponse("""
+
+<html>
+
+<body>
+
+<h2>
+SentinelAI Investigation Console
+</h2>
+
+<form method="post"
+      action="/agent-ui">
+
+<textarea
+name="prompt"
+rows="4"
+style="width:100%;">
+</textarea>
+
+<br><br>
+
+<button>
+Run Full Investigation
+</button>
+
+</form>
+
+</body>
+
+</html>
+
+""")
