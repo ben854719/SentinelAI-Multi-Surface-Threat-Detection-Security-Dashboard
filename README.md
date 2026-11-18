@@ -82,10 +82,6 @@ The application is to deploy on Render using a lightweight cloud-native architec
 
 - `python agent_loop.py`
 
-## Frontend:
-
-- Browser-based HTML, JavaScript, and Plotly dashboards for security monitoring, KPI visualization, and threat analytics.
-
 ## Deploy:
 
 - Render automatically builds and deploys the application on every GitHub push.
