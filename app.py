@@ -16,8 +16,13 @@ from plotly.subplots import make_subplots
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph, END
 from langsmith import Client
-from mcp.server import MCPServer
 from typing import TypedDict
+
+try:
+    from mcp.server import MCPServer
+    MCP_ENABLED = True
+except Exception:
+    MCP_ENABLED = False
 
 # ============================================================
 # GEMINI
@@ -27,6 +32,19 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-3.6-flash",
     api_key=os.environ["GOOGLE_API_KEY"]
 )
+# =============================================================
+# MCP SERVER
+# =============================================================
+
+if MCP_ENABLED:
+    try:
+        mcp_server = MCPServer(
+            name="SentinelAI-MCP"
+        )
+    except Exception:
+        mcp_server = None
+else:
+    mcp_server = None
 
 # ============================================================
 # LANGSMITH
@@ -46,6 +64,20 @@ def trace_run(user_input, output):
 
     except:
         pass
+
+# ============================================================
+# BASE64 REPORT EXPORT
+# ============================================================
+
+def encode_report(data):
+
+    return base64.b64encode(
+        json.dumps(
+            data,
+            indent=2,
+            default=str
+        ).encode()
+    ).decode()
 
 # ============================================================
 # CYBER DATASET
@@ -307,11 +339,18 @@ def anomaly_step(state):
 
         "anomalies": {
 
-            "count": len(anomalies),
+            "count":
+                len(anomalies),
 
             "records":
-                anomalies.head(10).to_dict()
+
+                anomalies.head(
+                    10
+                ).to_dict(
+                    orient="records"
+                )
         }
+
     }
 
 # ============================================================
@@ -400,13 +439,28 @@ Provide:
 
 """
 
-    result = llm.invoke(prompt)
+  try:
 
-    return {
+    result = llm.invoke(
+        prompt
+    )
 
-        "analysis":
-            result.content
-    }
+    analysis = (
+        result.content
+    )
+
+except Exception as e:
+
+    analysis = (
+        f"Analysis Failed: {e}"
+    )
+
+return {
+
+    "analysis":
+        analysis
+
+}
 
 # ============================================================
 # AGENT 6
@@ -565,33 +619,87 @@ agent_app = builder.compile()
 
 app = FastAPI()
 
+# ============================================================
+# HEALTH CHECK
+# ============================================================
+
+@app.get("/health")
+def health():
+
+    return {
+        "status": "healthy",
+        "platform": "SentinelAI"
+    }
+
+@app.get("/health")
+...
+@app.get("/mcp/status")
+....
+@app.get("/export/report")
+...
 @app.get("/")
 def home():
 
     return HTMLResponse("""
 
-<h1>
-SentinelAI Platform
-</h1>
+    <h1>
+# ==================================================
+# MCP Server Endpoint.
+# ==================================================
 
-<a href='/dashboard'>
-Dashboard
-</a>
+@app.get("/mcp/status")
+def mcp_status():
 
-<br><br>
+    return {
 
-<a href='/agent-ui'>
-Agent Console
-</a>
+        "mcp_enabled":
+            MCP_ENABLED,
 
-""")
+        "server":
+
+            "connected"
+
+            if mcp_server
+
+            else
+
+            "disabled"
+
+    }
+
+# ============================================================
+# Report Status.
+# ============================================================
+
+@app.get("/export/report")
+def export_report():
+
+    report = {
+        "platform":
+            "SentinelAI",
+
+        "system":
+            "Cybersecurity Intelligence",
+
+        "status":
+            "Operational"
+    }
+
+    return {
+
+        "base64_report":
+
+            encode_report(
+                report
+            )
+
+    }
 
 # ============================================================
 # DASHBOARD
 # ============================================================
 
 @app.get("/dashboard")
-
 def dashboard():
 
     html = (
@@ -610,8 +718,11 @@ def dashboard():
 # AGENT API
 # ============================================================
 
-@app.post("/agent")
+# ============================================================
+# AGENT API
+# ============================================================
 
+@app.post("/agent")
 def run_agent(
     prompt: str = Body(...)
 ):
@@ -635,6 +746,12 @@ def run_agent(
         "action_report": ""
 
     })
+
+    result[
+        "base64_report"
+    ] = encode_report(
+        result
+    )
 
     trace_run(
         prompt,
@@ -683,3 +800,37 @@ Run Full Investigation
 </html>
 
 """)
+
+@app.get("/agent-ui")
+def agent_ui():
+
+    return HTMLResponse("""
+    <html>
+    <body>
+
+    <h2>
+    SentinelAI Investigation Console
+    </h2>
+
+    </body>
+    </html>
+    """)
+
+# ============================================================
+# LOCAL STARTUP
+# ============================================================
+
+if __name__ == "__main__":
+
+ import uvicorn
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=int(
+            os.getenv(
+                "PORT",
+                8000
+            )
+        )
+    )
