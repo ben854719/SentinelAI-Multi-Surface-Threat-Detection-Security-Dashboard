@@ -1,15 +1,50 @@
+# @app.get("/dashboard")
+def dashboard():
+
+    return HTMLResponse(DASHBOARD_HTML)
 # <!-- Container of the Dashboard -->
 # <div id="dashboard-container">
 #     <style>
-#         #dashboard-container {
-#             background-color: #0d0e15;
-#             color: #abb2bf;
-#             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-#             padding: 24px;
-#             border-radius: 12px;
-#             border: 1px solid #1f2335;
-#             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-#         }
+#        * {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #0d0e15;
+}
+
+#dashboard-container {
+
+    background-color: #0d0e15;
+
+    color: #abb2bf;
+
+    font-family:
+        'Inter',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        sans-serif;
+
+    padding: 24px;
+
+    border-radius: 12px;
+
+    border: 1px solid #1f2335;
+
+    box-shadow:
+        0 8px 32px 0
+        rgba(0, 0, 0, 0.37);
+
+    max-width: 1800px;
+
+    margin: auto;
+
+    min-height: 100vh;
+}
+
 #         .dashboard-header {
 #             text-align: left;
 #             border-bottom: 1px solid #1f2335;
@@ -137,11 +172,33 @@
 #             font-size: 11px;
 #             border: 1px solid #1f2335;
 #         }
+#
+#        @media (max-width: 768px) {
+
+    .chart-panel,
+    .threat-3d-panel {
+
+        grid-column: span 1;
+
+    }
+
+    .dashboard-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+    }
+
+}
+
 #     </style>
-# 
+
 #     <!-- WebGL & Chart Engine Dependencies -->
 #     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-#     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+#     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
 # 
 #     <div class="dashboard-header">
 #         <div class="dashboard-title-wrapper">
@@ -208,6 +265,36 @@
 #     <div class="grid-layout">
 #         <div class="panel">
 #             <h3>Diagnostics Control</h3>
+#             <div class="panel">
+
+    <h3>Diagnostics Control</h3>
+
+    <button
+        class="action-btn"
+        id="runAgent"
+    >
+        Run AI Investigation
+    </button>
+
+    <button
+        class="action-btn"
+        id="exportBtn"
+    >
+        Export Security Report
+    </button>
+
+    <button
+        class="action-btn"
+        id="loadPacket"
+    >
+        Load Diagnostic Packet
+    </button>
+
+    <div id="packet" style="margin-top: 10px;"></div>
+
+    <div id="rulePath"></div>
+
+</div>
 #             <button class="action-btn" id="loadPacket">Load Diagnostic Packet</button>
 #             <div id="packet" style="margin-top: 10px;"></div>
 #             <div id="rulePath"></div>
