@@ -78,10 +78,6 @@ The application is to deploy on Render using a lightweight cloud-native architec
   
 - LangSmith API Key
   
-- Model Endpoint URLs
-  
-- Security Configuration Settings
-
 ## Add a Background Worker (Agentic AI Workflows):
 
 - Service Type: Background Worker
