@@ -413,54 +413,48 @@ def dashboard_step(state):
 def analysis_step(state):
 
     prompt = f"""
-
 You are SentinelAI.
 
 Metrics:
-{json.dumps(state['metrics'],indent=2)}
+{json.dumps(state['metrics'], indent=2)}
 
 Risk:
-{json.dumps(state['risk'],indent=2)}
+{json.dumps(state['risk'], indent=2)}
 
 Anomalies:
-{json.dumps(state['anomalies'],indent=2)}
+{json.dumps(state['anomalies'], indent=2)}
 
 Provide:
 
-1 Threat Assessment
-
-2 Root Cause
-
-3 Risk Severity
-
-4 Recommended Actions
-
-5 Executive Summary
-
+1. Threat Assessment
+2. Root Cause
+3. Risk Severity
+4. Recommended Actions
+5. Executive Summary
 """
 
-  try:
+    try:
 
-    result = llm.invoke(
-        prompt
-    )
+        result = llm.invoke(
+            prompt
+        )
 
-    analysis = (
-        result.content
-    )
+        analysis = (
+            result.content
+        )
 
-except Exception as e:
+    except Exception as e:
 
-    analysis = (
-        f"Analysis Failed: {e}"
-    )
+        analysis = (
+            f"Analysis Failed: {e}"
+        )
 
-return {
+    return {
 
-    "analysis":
-        analysis
+        "analysis":
+            analysis
 
-}
+    }
 
 # ============================================================
 # AGENT 6
@@ -632,17 +626,72 @@ def health():
     }
 
 @app.get("/health")
-...
+
 @app.get("/mcp/status")
-....
+
 @app.get("/export/report")
-...
+
 @app.get("/")
 def home():
 
     return HTMLResponse("""
-
     <h1>
+    SentinelAI Platform
+    </h1>
+
+    <a href="/dashboard">
+    Dashboard
+    </a>
+
+    <br><br>
+
+    <a href="/agent-ui">
+    Agent Console
+    </a>
+    """)
+
+@app.get("/agent-ui")
+def agent_ui():
+
+    return HTMLResponse("""
+    <html>
+    <body>
+
+    <h2>
+    SentinelAI Investigation Console
+    </h2>
+
+    <form method="post"
+          action="/agent-ui">
+
+    <textarea
+        name="prompt"
+        rows="4"
+        style="width:100%;">
+    </textarea>
+
+    <br><br>
+
+    <button>
+    Run Full Investigation
+    </button>
+
+    </form>
+
+    </body>
+    </html>
+    """)
+
+@app.get("/")
+def home():
+
+    return HTMLResponse("""
+    <h1>Hello</h1>
+    """)
+
+@app.get("/mcp/status")
+def mcp_status():
+
 # ==================================================
 # MCP Server Endpoint.
 # ==================================================
